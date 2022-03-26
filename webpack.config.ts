@@ -4,6 +4,7 @@ import path from 'path';
 
 const config: Configuration = {
   mode: 'development',
+  target: 'electron-renderer',
   entry: './src/index.ts',
   output: {
     path: path.join(__dirname, 'build'),

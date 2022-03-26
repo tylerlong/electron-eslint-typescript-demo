@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import { ESLint } from 'eslint';
 import log from 'electron-log';
 import { join } from 'path';
@@ -8,18 +8,13 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
   });
   mainWindow.loadFile('src/index.html');
   mainWindow.webContents.openDevTools();
-  const eslint = new ESLint({ cwd: join(__dirname, '..').replace('app.asar', 'app.asar.unpacked') });
-  setTimeout(async () => {
-    try {
-      const r = await eslint.lintText('var a = 1', { filePath: 'src/temp.ts' });
-      mainWindow.webContents.executeJavaScript(`console.log(\`${JSON.stringify(r, null, 2)}\`);`);
-    } catch (e) {
-      log.error(e);
-    }
-  }, 1000);
 }
 
 app.whenReady().then(() => {
@@ -31,4 +26,15 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
+});
+
+const eslint = new ESLint({ cwd: join(__dirname, '..').replace('app.asar', 'app.asar.unpacked') });
+ipcMain.handle('lint', async (event, code) => {
+  try {
+    const r = await eslint.lintText(code, { filePath: 'src/temp.ts' });
+    return r;
+  } catch (e) {
+    log.error(e);
+    throw e;
+  }
 });

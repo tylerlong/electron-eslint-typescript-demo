@@ -10,7 +10,7 @@
   "scripts": {
     "start": "yarn build && electron .",
     "lint": "eslint src --ext .ts --fix",
-    "build": "tsc src/main.ts && webpack",
+    "build": "tsc && webpack",
     "release": "rm -rf dist && yarn build && electron-builder build -m"
   },
   "dependencies": {

@@ -2,6 +2,7 @@
 import { app, BrowserWindow } from 'electron';
 import { ESLint } from 'eslint';
 import log from 'electron-log';
+import * as path from 'path';
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -10,18 +11,15 @@ function createWindow() {
   });
   mainWindow.loadFile('src/index.html');
   mainWindow.webContents.openDevTools();
-  log.info('start');
-  try {
-    const eslint = new ESLint();
-    eslint.lintText('var a = 1', { filePath: 'src/main.ts' }).then((r) => {
-      log.info(JSON.stringify(r, null, 2));
-    });
-  } catch (e) {
-    log.info(e);
-  } finally {
-    log.info('finally');
-  }
-  log.info('end');
+  const eslint = new ESLint({ cwd: path.join(__dirname, '..') });
+  setTimeout(async () => {
+    try {
+      const r = await eslint.lintText('var a = 1', { filePath: 'src/main.ts' });
+      mainWindow.webContents.executeJavaScript(`console.log(\`${JSON.stringify(r, null, 2)}\`);`);
+    } catch (e) {
+      log.error(e);
+    }
+  }, 1000);
 }
 
 app.whenReady().then(() => {

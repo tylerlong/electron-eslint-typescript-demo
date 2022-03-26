@@ -1,0 +1,12 @@
+{
+  "license": "MIT",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "tsc && electron ."
+  },
+  "devDependencies": {
+    "electron": "^17.2.0",
+    "typescript": "^4.6.3",
+    "yarn-upgrade-all": "^0.6.1"
+  }
+}

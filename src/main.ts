@@ -7,10 +7,13 @@ function createWindow() {
     height: 600,
   });
   mainWindow.loadFile('src/index.html');
+  mainWindow.webContents.openDevTools();
   const eslint = new ESLint();
-  eslint.lintText('var a = 1', { filePath: 'src/main.ts' }).then((r) => {
-    console.log(JSON.stringify(r, null, 2));
-  });
+  setTimeout(() => {
+    eslint.lintText('var a = 1', { filePath: 'src/main.ts' }).then((r) => {
+      mainWindow.webContents.executeJavaScript(`console.log(\`${JSON.stringify(r, null, 2)}\`);`);
+    });
+  }, 1000);
 }
 
 app.whenReady().then(() => {

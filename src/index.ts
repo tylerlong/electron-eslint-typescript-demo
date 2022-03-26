@@ -45,9 +45,12 @@ export interface IMarkerData {
 }
 */
 
-const lint = async () => {
-  const r = await ipcRenderer.invoke('lint', model.getValue());
-  editor.setModelMarkers(model, 'eslint', r[0].messages.map((m) => ({
+const lint = async (fix = false) => {
+  const r = await ipcRenderer.invoke('lint', model.getValue(), fix);
+  if (r.output) {
+    model.setValue(r.output);
+  }
+  editor.setModelMarkers(model, 'eslint', r.messages.map((m) => ({
     severity: m.severity * 4,
     message: m.message,
     startLineNumber: m.line,
@@ -61,4 +64,10 @@ const dLint = debounce(lint, 100, { leading: false, trailing: true });
 lint();
 model.onDidChangeContent(() => {
   dLint();
+});
+
+ipcRenderer.on('message', (event, message) => {
+  if (message.command === 'save') {
+    lint(true);
+  }
 });

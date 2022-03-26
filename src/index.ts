@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { editor } from 'monaco-editor';
 import { ipcRenderer } from 'electron';
+import { debounce } from 'lodash';
 
 import './index.css';
 
@@ -8,7 +9,6 @@ const mEditor = editor.create(document.getElementById('container'), {
   value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
   language: 'javascript',
 });
-
 const model = mEditor.getModel();
 
 /*
@@ -45,9 +45,8 @@ export interface IMarkerData {
 }
 */
 
-const main = async () => {
+const lint = async () => {
   const r = await ipcRenderer.invoke('lint', model.getValue());
-  console.log(r[0].messages);
   editor.setModelMarkers(model, 'eslint', r[0].messages.map((m) => ({
     severity: m.severity * 4,
     message: m.message,
@@ -57,4 +56,9 @@ const main = async () => {
     endColumn: m.endColumn,
   })));
 };
-main();
+const dLint = debounce(lint, 100, { leading: false, trailing: true });
+
+lint();
+model.onDidChangeContent(() => {
+  dLint();
+});

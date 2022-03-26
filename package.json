@@ -25,9 +25,11 @@
   },
   "devDependencies": {
     "@types/eslint": "^8.4.1",
+    "@types/lodash": "^4.14.180",
     "css-loader": "^6.7.1",
     "electron": "^17.2.0",
     "electron-builder": "^22.14.13",
+    "lodash": "^4.17.21",
     "monaco-editor": "^0.33.0",
     "monaco-editor-webpack-plugin": "^7.0.1",
     "style-loader": "^3.3.1",

@@ -1,6 +1,7 @@
 {
   "files.exclude": {
     "src/**/*.js": true,
+    "webpack.config.js":true
   },
   "filewatcher.commands": [
     {

@@ -1,6 +1,9 @@
 {
+  "compilerOptions": {
+    "esModuleInterop": true,
+  },
   "include": [
-    "src/**/*.ts",
+    "**/*.ts",
     ".eslintrc.js"
   ]
 }

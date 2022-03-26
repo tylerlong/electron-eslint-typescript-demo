@@ -1,5 +1,7 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { app, BrowserWindow } from 'electron';
 import { ESLint } from 'eslint';
+import log from 'electron-log';
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -8,12 +10,18 @@ function createWindow() {
   });
   mainWindow.loadFile('src/index.html');
   mainWindow.webContents.openDevTools();
-  const eslint = new ESLint();
-  setTimeout(() => {
+  log.info('start');
+  try {
+    const eslint = new ESLint();
     eslint.lintText('var a = 1', { filePath: 'src/main.ts' }).then((r) => {
-      mainWindow.webContents.executeJavaScript(`console.log(\`${JSON.stringify(r, null, 2)}\`);`);
+      log.info(JSON.stringify(r, null, 2));
     });
-  }, 1000);
+  } catch (e) {
+    log.info(e);
+  } finally {
+    log.info('finally');
+  }
+  log.info('end');
 }
 
 app.whenReady().then(() => {

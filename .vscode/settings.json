@@ -1,5 +1,13 @@
 {
   "files.exclude": {
     "src/**/*.js": true,
-  }
+  },
+  "filewatcher.commands": [
+    {
+      "match": "\\.ts$",
+      "isAsync": true,
+      "cmd": "cd '${workspaceRoot}' && yarn eslint '${file}' --fix",
+      "event": "onFileChange"
+    }
+  ]
 }

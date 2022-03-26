@@ -1,4 +1,5 @@
-const { app, BrowserWindow } = require('electron');
+import { app, BrowserWindow } from 'electron';
+import { ESLint } from 'eslint';
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -6,6 +7,10 @@ function createWindow() {
     height: 600,
   });
   mainWindow.loadFile('src/index.html');
+  const eslint = new ESLint();
+  eslint.lintText('var a = 1', { filePath: 'src/main.ts' }).then((r) => {
+    console.log(JSON.stringify(r, null, 2));
+  });
 }
 
 app.whenReady().then(() => {

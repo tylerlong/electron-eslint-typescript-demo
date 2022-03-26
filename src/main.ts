@@ -14,7 +14,7 @@ function createWindow() {
   const eslint = new ESLint({ cwd: join(__dirname, '..').replace('app.asar', 'app.asar.unpacked') });
   setTimeout(async () => {
     try {
-      const r = await eslint.lintText('var a = 1', { filePath: 'src/main.ts' });
+      const r = await eslint.lintText('var a = 1', { filePath: 'src/temp.ts' });
       mainWindow.webContents.executeJavaScript(`console.log(\`${JSON.stringify(r, null, 2)}\`);`);
     } catch (e) {
       log.error(e);

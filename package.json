@@ -34,7 +34,10 @@
       "category": "public.app-category.developer-tools"
     },
     "asarUnpack": [
-      "**/*"
+      "src/temp.ts",
+      ".eslintrc.js",
+      "tsconfig.json",
+      "node_modules/**/*"
     ]
   }
 }

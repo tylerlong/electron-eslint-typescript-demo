@@ -2,7 +2,7 @@
 import { app, BrowserWindow } from 'electron';
 import { ESLint } from 'eslint';
 import log from 'electron-log';
-import * as path from 'path';
+import { join } from 'path';
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -11,7 +11,7 @@ function createWindow() {
   });
   mainWindow.loadFile('src/index.html');
   mainWindow.webContents.openDevTools();
-  const eslint = new ESLint({ cwd: path.join(__dirname, '..') });
+  const eslint = new ESLint({ cwd: join(__dirname, '..').replace('app.asar', 'app.asar.unpacked') });
   setTimeout(async () => {
     try {
       const r = await eslint.lintText('var a = 1', { filePath: 'src/main.ts' });

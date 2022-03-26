@@ -32,6 +32,9 @@
     "appId": "chuntao.liu.eslint.demo",
     "mac": {
       "category": "public.app-category.developer-tools"
-    }
+    },
+    "asarUnpack": [
+      "**/*"
+    ]
   }
 }

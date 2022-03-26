@@ -48,7 +48,9 @@ export interface IMarkerData {
 const lint = async (fix = false) => {
   const r = await ipcRenderer.invoke('lint', model.getValue(), fix);
   if (r.output) {
-    model.setValue(r.output);
+    mEditor.executeEdits('eslint', [{
+      range: model.getFullModelRange(), text: r.output,
+    }]);
   }
   editor.setModelMarkers(model, 'eslint', r.messages.map((m) => ({
     severity: m.severity * 4,

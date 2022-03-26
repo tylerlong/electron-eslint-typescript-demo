@@ -3,7 +3,7 @@ const { join } = require('path');
 module.exports = {
   root: true,
   parserOptions: {
-    project: join(__dirname, 'tsconfig.json').replace('app.asar', 'app.asar.unpacked'),
+    project: join(__dirname, 'tsconfig.json'),
   },
   extends: [
     'eslint-config-airbnb-base',

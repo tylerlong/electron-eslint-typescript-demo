@@ -79,7 +79,6 @@ const lint = async (fix = false) => {
   }
   const markers: editor.IMarkerData[] = [];
   actions.length = 0;
-  console.log(r.messages);
   r.messages.forEach((m) => {
     const marker = {
       severity: m.severity * 4,
@@ -128,7 +127,6 @@ ipcRenderer.on('message', (event, message) => {
 
 const codeActionProvider: languages.CodeActionProvider = {
   provideCodeActions: (_model: editor.ITextModel, range: Range) => {
-    console.log(range);
     const fActions = actions.filter((a) => {
       const {
         startLineNumber, startColumn, endLineNumber, endColumn,

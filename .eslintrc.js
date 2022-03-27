@@ -6,7 +6,8 @@ module.exports = {
     project: join(__dirname, 'tsconfig.json'),
   },
   extends: [
-    'eslint-config-airbnb-base',
-    'eslint-config-airbnb-typescript/base',
+    'eslint-config-airbnb',
+    'eslint-config-airbnb/hooks',
+    'eslint-config-airbnb-typescript',
   ],
 };

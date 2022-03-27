@@ -1,3 +1,3 @@
 # Todo
 
-- quick fix sometimes is wrong
+- 鼠标放在问题最前面的位置，气球不会弹出来。

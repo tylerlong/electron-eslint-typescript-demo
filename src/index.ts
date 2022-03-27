@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import {
-  editor, languages, Range,
+  editor, IRange, languages, Range,
 } from 'monaco-editor';
 import { ipcRenderer } from 'electron';
 import { debounce } from 'lodash';
@@ -8,7 +8,7 @@ import { debounce } from 'lodash';
 import './index.css';
 
 const mEditor = editor.create(document.getElementById('container'), {
-  value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
+  value: ['function x() {', '\tconsole.log("Hello world!");', '};'].join('\n'),
   language: 'typescript',
 });
 const model = mEditor.getModel();
@@ -46,6 +46,29 @@ export interface IMarkerData {
   tags?: MarkerTag[];
 }
 */
+
+const getPosition = (n: number): [number, number] => {
+  const s = model.getValue();
+  let [line, column] = [1, 1];
+  for (let i = 0; i < n; i += 1) {
+    const c = s.charAt(i);
+    if (c === '\n') {
+      line += 1;
+      column = 1;
+    } else {
+      column += 1;
+    }
+  }
+  return [line, column];
+};
+const getRange = (n1: number, n2: number): IRange => {
+  const [startLineNumber, startColumn] = getPosition(n1);
+  const [endLineNumber, endColumn] = getPosition(n2);
+  return {
+    startLineNumber, startColumn, endLineNumber, endColumn,
+  };
+};
+
 const actions: languages.CodeAction[] = [];
 const lint = async (fix = false) => {
   const r = await ipcRenderer.invoke('lint', model.getValue(), fix);
@@ -56,6 +79,7 @@ const lint = async (fix = false) => {
   }
   const markers: editor.IMarkerData[] = [];
   actions.length = 0;
+  console.log(r.messages);
   r.messages.forEach((m) => {
     const marker = {
       severity: m.severity * 4,
@@ -77,7 +101,7 @@ const lint = async (fix = false) => {
             {
               resource: model.uri,
               edit: {
-                range: marker,
+                range: getRange(m.fix.range[0], m.fix.range[1]),
                 text: m.fix.text,
               },
             },
@@ -104,6 +128,7 @@ ipcRenderer.on('message', (event, message) => {
 
 const codeActionProvider: languages.CodeActionProvider = {
   provideCodeActions: (_model: editor.ITextModel, range: Range) => {
+    console.log(range);
     const fActions = actions.filter((a) => {
       const {
         startLineNumber, startColumn, endLineNumber, endColumn,

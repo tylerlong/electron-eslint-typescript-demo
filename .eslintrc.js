@@ -10,4 +10,7 @@ module.exports = {
     'eslint-config-airbnb/hooks',
     'eslint-config-airbnb-typescript',
   ],
+  rules: {
+    'no-console': 'off',
+  },
 };

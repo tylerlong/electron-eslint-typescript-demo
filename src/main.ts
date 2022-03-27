@@ -9,8 +9,8 @@ import { newTemplate } from 'electron-application-menu-template';
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1366,
+    height: 768,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,

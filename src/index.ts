@@ -85,8 +85,9 @@ const lint = async (fix = false) => {
       message: m.message,
       startLineNumber: m.line,
       startColumn: m.column,
-      endLineNumber: m.endLine ?? m.line,
-      endColumn: m.endColumn ?? m.column,
+      endLineNumber: m.endLine,
+      endColumn: m.endColumn,
+      source: m.ruleId,
     };
     markers.push(marker);
     if (m.fix) {

@@ -1,3 +1,3 @@
 # Todo
 
-- no quick fix for style issues
+- quick fix sometimes is wrong
